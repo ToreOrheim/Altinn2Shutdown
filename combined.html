@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Altinn 2 Shutdown timer</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        text-align: center;
+        padding: 2rem;
+      }
+
+      h1 {
+        color: #333;
+      }
+
+      h1:first-of-type {
+        margin-bottom: 0.5rem;
+        font-size: 1.6rem;
+      }
+
+      h1:nth-of-type(2) {
+        margin-bottom: 1.5rem;
+        font-size: 1.4rem;
+        font-weight: normal;
+      }
+
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      .time-segment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .time-segment span:first-child {
+        font-size: 3rem;
+        font-weight: bold;
+        background-color: #1e3a8a;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+        min-width: 80px;
+      }
+
+      .label {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      @media (max-width: 600px) {
+        .countdown {
+          flex-wrap: wrap;
+        }
+
+        .time-segment span:first-child {
+          font-size: 2.5rem;
+          min-width: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Altinn 2 shutdown happening the 19th of June, 2026</h1>
+    <h1>Time remaining:</h1>
+    <div id="countdown" class="countdown">
+      <div class="time-segment">
+        <span id="days">00</span>
+        <span class="label">Days</span>
+      </div>
+      <div class="time-segment">
+        <span id="hours">00</span>
+        <span class="label">Hours</span>
+      </div>
+      <div class="time-segment">
+        <span id="minutes">00</span>
+        <span class="label">Minutes</span>
+      </div>
+      <div class="time-segment">
+        <span id="seconds">00</span>
+        <span class="label">Seconds</span>
+      </div>
+    </div>
+    <script>
+      /**
+       * CountdownTimer - A class to manage countdown functionality
+       */
+      class CountdownTimer {
+        /**
+         * Creates a new CountdownTimer instance
+         * @param {Date} targetDate - The target date to countdown to
+         * @param {Object} elements - DOM elements for displaying the countdown
+         * @param {HTMLElement} elements.days - Element to display days
+         * @param {HTMLElement} elements.hours - Element to display hours
+         * @param {HTMLElement} elements.minutes - Element to display minutes
+         * @param {HTMLElement} elements.seconds - Element to display seconds
+         */
+        constructor(targetDate, elements) {
+          /** @private {Date} */
+          this.targetDate = targetDate;
+
+          /** @private {Object} */
+          this.elements = elements;
+
+          /** @private {number|null} */
+          this.intervalId = null;
+        }
+
+        /**
+         * Calculates the time remaining until the target date
+         * @returns {Object} Time remaining object with days, hours, minutes, and seconds
+         * @private
+         */
+        _calculateTimeRemaining() {
+          const now = new Date().getTime();
+          const distance = this.targetDate.getTime() - now;
+
+          // Calculate time units
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor(
+            (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+          );
+          const minutes = Math.floor(
+            (distance % (1000 * 60 * 60)) / (1000 * 60)
+          );
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          return {
+            total: distance,
+            days,
+            hours,
+            minutes,
+            seconds,
+          };
+        }
+
+        /**
+         * Updates the countdown display
+         * @private
+         */
+        _updateCountdown() {
+          const timeRemaining = this._calculateTimeRemaining();
+
+          // Update DOM elements
+          this.elements.days.textContent = this._formatTimeUnit(
+            timeRemaining.days
+          );
+          this.elements.hours.textContent = this._formatTimeUnit(
+            timeRemaining.hours
+          );
+          this.elements.minutes.textContent = this._formatTimeUnit(
+            timeRemaining.minutes
+          );
+          this.elements.seconds.textContent = this._formatTimeUnit(
+            timeRemaining.seconds
+          );
+
+          // Check if countdown has expired
+          if (timeRemaining.total <= 0) {
+            this.stop();
+            this.elements.days.textContent = "00";
+            this.elements.hours.textContent = "00";
+            this.elements.minutes.textContent = "00";
+            this.elements.seconds.textContent = "00";
+          }
+        }
+
+        /**
+         * Formats a time unit to ensure it is displayed with leading zeros when needed
+         * @param {number} value - The time unit value to format
+         * @returns {string} Formatted time unit as a string
+         * @private
+         */
+        _formatTimeUnit(value) {
+          return value < 10 ? `0${value}` : `${value}`;
+        }
+
+        /**
+         * Starts the countdown timer
+         */
+        start() {
+          // Initial update
+          this._updateCountdown();
+
+          // Set interval to update countdown every second
+          this.intervalId = setInterval(() => {
+            this._updateCountdown();
+          }, 1000);
+        }
+
+        /**
+         * Stops the countdown timer
+         */
+        stop() {
+          if (this.intervalId !== null) {
+            clearInterval(this.intervalId);
+            this.intervalId = null;
+          }
+        }
+      }
+
+      // When the DOM is fully loaded
+      document.addEventListener("DOMContentLoaded", () => {
+        /**
+         * The target date for the countdown timer (June 19, 2026)
+         * @type {Date}
+         */
+        const targetDate = new Date("2026-06-19T23:59:59");
+
+        /**
+         * DOM elements for the countdown display
+         * @type {Object}
+         */
+        const elements = {
+          days: document.getElementById("days"),
+          hours: document.getElementById("hours"),
+          minutes: document.getElementById("minutes"),
+          seconds: document.getElementById("seconds"),
+        };
+
+        // Create and start the countdown timer
+        const countdownTimer = new CountdownTimer(targetDate, elements);
+        countdownTimer.start();
+      });
+    </script>
+  </body>
+</html>

@@ -1,1 +1,0 @@
-# Altinn2Shutdown
