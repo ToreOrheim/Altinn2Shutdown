@@ -16,10 +16,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   countdownContainer.innerHTML = await loadCountdownComponent();
 
   /**
-   * The target date for the countdown timer (June 19, 2026)
+   * The target date for the countdown timer (May 31, 2026 — last usable date)
    * @type {Date}
    */
-  const targetDate = new Date("2026-06-19T23:59:59");
+  const targetDate = new Date("2026-05-31T23:59:59");
 
   // Initialize the countdown
   initCountdown(targetDate);
