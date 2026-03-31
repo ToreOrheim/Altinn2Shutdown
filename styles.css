@@ -18,19 +18,28 @@ body {
   padding: 2rem;
 }
 
+.intro-message {
+  max-width: none;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
+}
+
 h1 {
   color: #333;
+}
+
+.usable-period-header {
+  margin-top: 1.4rem;
+}
+
+.shutdown-header {
+  margin-top: 1.4rem;
 }
 
 h1:first-of-type {
   margin-bottom: 0.5rem;
   font-size: 1.6rem;
-}
-
-h1:nth-of-type(2) {
-  margin-bottom: 1.5rem;
-  font-size: 1.4rem;
-  font-weight: normal;
 }
 
 .countdown {
@@ -65,6 +74,10 @@ h1:nth-of-type(2) {
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
+}
+
+.countdown-component {
+  margin-bottom: 2.5rem;
 }
 
 @media (max-width: 600px) {

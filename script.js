@@ -34,7 +34,7 @@ class CountdownTimer {
     // Calculate time units
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor(
-      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
     );
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
@@ -59,10 +59,10 @@ class CountdownTimer {
     this.elements.days.textContent = this._formatTimeUnit(timeRemaining.days);
     this.elements.hours.textContent = this._formatTimeUnit(timeRemaining.hours);
     this.elements.minutes.textContent = this._formatTimeUnit(
-      timeRemaining.minutes
+      timeRemaining.minutes,
     );
     this.elements.seconds.textContent = this._formatTimeUnit(
-      timeRemaining.seconds
+      timeRemaining.seconds,
     );
 
     // Check if countdown has expired
@@ -111,24 +111,70 @@ class CountdownTimer {
 
 // When the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
+  // Dynamically instantiate countdown components
+  const template = document.getElementById("countdown-component-template");
+  document
+    .querySelectorAll(".countdown-component[data-title][data-date]")
+    .forEach((container, idx) => {
+      const clone = template.content.cloneNode(true);
+      const title = container.getAttribute("data-title");
+      const dateStr = container.getAttribute("data-date");
+      clone.querySelector(".countdown-title").textContent = title;
+      // Assign unique IDs for each segment
+      ["days", "hours", "minutes", "seconds"].forEach((unit) => {
+        clone.querySelector("." + unit).id = unit + "-" + idx;
+      });
+      container.appendChild(clone);
+      // Setup CountdownTimer
+      const elements = {
+        days: document.getElementById("days-" + idx),
+        hours: document.getElementById("hours-" + idx),
+        minutes: document.getElementById("minutes-" + idx),
+        seconds: document.getElementById("seconds-" + idx),
+      };
+      const targetDate = new Date(dateStr);
+      const timer = new CountdownTimer(targetDate, elements);
+      timer.start();
+    });
   /**
-   * The target date for the countdown timer (May 31, 2026)
+   * The target date for the shutdown timer (June 19, 2026)
    * @type {Date}
    */
-  const targetDate = new Date("2026-06-19T23:59:59");
+  const shutdownDate = new Date("2026-06-19T23:59:59");
 
   /**
-   * DOM elements for the countdown display
+   * The target date for the end of usable period (example: May 31, 2026)
+   * @type {Date}
+   */
+  const usableEndDate = new Date("2026-05-31T23:59:59");
+
+  /**
+   * DOM elements for the shutdown countdown display
    * @type {Object}
    */
-  const elements = {
+  const shutdownElements = {
     days: document.getElementById("days"),
     hours: document.getElementById("hours"),
     minutes: document.getElementById("minutes"),
     seconds: document.getElementById("seconds"),
   };
 
-  // Create and start the countdown timer
-  const countdownTimer = new CountdownTimer(targetDate, elements);
-  countdownTimer.start();
+  /**
+   * DOM elements for the usable period countdown display
+   * @type {Object}
+   */
+  const usableElements = {
+    days: document.getElementById("usable-days"),
+    hours: document.getElementById("usable-hours"),
+    minutes: document.getElementById("usable-minutes"),
+    seconds: document.getElementById("usable-seconds"),
+  };
+
+  // Create and start the shutdown countdown timer
+  const shutdownTimer = new CountdownTimer(shutdownDate, shutdownElements);
+  shutdownTimer.start();
+
+  // Create and start the usable period countdown timer
+  const usableTimer = new CountdownTimer(usableEndDate, usableElements);
+  usableTimer.start();
 });
