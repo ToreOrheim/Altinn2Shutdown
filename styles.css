@@ -23,18 +23,11 @@ body {
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+  margin-bottom: 2rem;
 }
 
 h1 {
   color: #333;
-}
-
-.usable-period-header {
-  margin-top: 1.4rem;
-}
-
-.shutdown-header {
-  margin-top: 1.4rem;
 }
 
 h1:first-of-type {
@@ -51,6 +44,7 @@ h1:first-of-type {
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 2rem;
 }
 
 .time-segment {

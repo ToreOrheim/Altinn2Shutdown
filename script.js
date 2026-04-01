@@ -124,7 +124,10 @@ document.addEventListener("DOMContentLoaded", () => {
       ["days", "hours", "minutes", "seconds"].forEach((unit) => {
         clone.querySelector("." + unit).id = unit + "-" + idx;
       });
-      container.appendChild(clone);
+      // Remove .countdown-component class from container to avoid nesting
+      container.classList.remove("countdown-component");
+      // Append only the inner countdown-container
+      container.appendChild(clone.querySelector('.countdown-container'));
       // Setup CountdownTimer
       const elements = {
         days: document.getElementById("days-" + idx),
@@ -140,41 +143,5 @@ document.addEventListener("DOMContentLoaded", () => {
    * The target date for the shutdown timer (June 19, 2026)
    * @type {Date}
    */
-  const shutdownDate = new Date("2026-06-19T23:59:59");
 
-  /**
-   * The target date for the end of usable period (example: May 31, 2026)
-   * @type {Date}
-   */
-  const usableEndDate = new Date("2026-05-31T23:59:59");
-
-  /**
-   * DOM elements for the shutdown countdown display
-   * @type {Object}
-   */
-  const shutdownElements = {
-    days: document.getElementById("days"),
-    hours: document.getElementById("hours"),
-    minutes: document.getElementById("minutes"),
-    seconds: document.getElementById("seconds"),
-  };
-
-  /**
-   * DOM elements for the usable period countdown display
-   * @type {Object}
-   */
-  const usableElements = {
-    days: document.getElementById("usable-days"),
-    hours: document.getElementById("usable-hours"),
-    minutes: document.getElementById("usable-minutes"),
-    seconds: document.getElementById("usable-seconds"),
-  };
-
-  // Create and start the shutdown countdown timer
-  const shutdownTimer = new CountdownTimer(shutdownDate, shutdownElements);
-  shutdownTimer.start();
-
-  // Create and start the usable period countdown timer
-  const usableTimer = new CountdownTimer(usableEndDate, usableElements);
-  usableTimer.start();
 });
