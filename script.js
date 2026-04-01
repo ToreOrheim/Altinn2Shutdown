@@ -122,7 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
       clone.querySelector(".countdown-title").textContent = title;
       // Assign unique IDs for each segment
       ["days", "hours", "minutes", "seconds"].forEach((unit) => {
-        clone.querySelector("." + unit).id = unit + "-" + idx;
+        // Use .countdown__segment > .days, etc.
+        clone.querySelector(".countdown__segment > ." + unit).id = unit + "-" + idx;
       });
       // Remove .countdown-component class from container to avoid nesting
       container.classList.remove("countdown-component");

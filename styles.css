@@ -5,6 +5,21 @@
 }
 
 body {
+  --countdown-bg: rgba(255, 255, 255, 0.1);
+  --countdown-gap: 1.5rem;
+  --countdown-padding: 2rem;
+  --countdown-radius: 10px;
+  --countdown-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  --countdown-margin-top: 2rem;
+  --countdown-margin-bottom: 2rem;
+  --countdown-number-size: 3rem;
+  --countdown-number-size-mobile: 2.5rem;
+  --countdown-number-bg: #1e3a8a;
+  --countdown-number-color: #fff;
+  --countdown-number-padding: 0.5rem 1rem;
+  --countdown-number-radius: 5px;
+  --countdown-number-min-width: 80px;
+  --countdown-number-min-width-mobile: 60px;
   font-family: "Arial", sans-serif;
   background-color: #f5f5f5;
   color: #333;
@@ -38,38 +53,45 @@ h1:first-of-type {
 .countdown {
   display: flex;
   justify-content: center;
-  gap: 1.5rem;
-  margin-top: 2rem;
-  background-color: rgba(255, 255, 255, 0.1);
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  margin-bottom: 2rem;
+  gap: var(--countdown-gap, 1.5rem);
+  margin-top: var(--countdown-margin-top, 2rem);
+  background-color: var(--countdown-bg, rgba(255, 255, 255, 0.1));
+  padding: var(--countdown-padding, 2rem);
+  border-radius: var(--countdown-radius, 10px);
+  box-shadow: var(--countdown-shadow, 0 5px 15px rgba(0, 0, 0, 0.2));
+  margin-bottom: var(--countdown-margin-bottom, 2rem);
 }
 
-.time-segment {
+.countdown__segment {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.time-segment span:first-child {
-  font-size: 3rem;
+.countdown__segment span:first-child {
+  font-size: var(--countdown-number-size, 3rem);
   font-weight: bold;
-  background-color: #1e3a8a;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  min-width: 80px;
+  background-color: var(--countdown-number-bg, #1e3a8a);
+  color: var(--countdown-number-color, #fff);
+  padding: var(--countdown-number-padding, 0.5rem 1rem);
+  border-radius: var(--countdown-number-radius, 5px);
+  min-width: var(--countdown-number-min-width, 80px);
 }
 
-.label {
+.countdown {
+  /* All countdown-related styles grouped here */
+}
+.countdown__segment {}
+.countdown__label {}
+
+.countdown__label {
   margin-top: 0.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
+/* .countdown-component is not countdown-related, so left as is */
 .countdown-component {
   margin-bottom: 2.5rem;
 }
@@ -79,8 +101,8 @@ h1:first-of-type {
     flex-wrap: wrap;
   }
 
-  .time-segment span:first-child {
-    font-size: 2.5rem;
-    min-width: 60px;
+  .countdown__segment span:first-child {
+    font-size: var(--countdown-number-size-mobile, 2.5rem);
+    min-width: var(--countdown-number-min-width-mobile, 60px);
   }
 }
