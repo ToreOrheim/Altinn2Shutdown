@@ -75,7 +75,11 @@ h1:first-of-type {
   color: var(--countdown-number-color, #fff);
   padding: var(--countdown-number-padding, 0.5rem 1rem);
   border-radius: var(--countdown-number-radius, 5px);
-  min-width: var(--countdown-number-min-width, 80px);
+  min-width: 420px;
+  text-align: center;
+  display: inline-block;
+  box-sizing: border-box;
+  word-break: break-word;
 }
 
 .countdown {
